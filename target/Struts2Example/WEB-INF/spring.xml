@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+        
+  <bean id="listProductActionBean" class="com.igt.user.action.WelcomeUserAction">
+        <property name="regDaoObj" ref="RegisterImpl" />
+         <property name="fetchDaoObj" ref="FetchImpl" />
+          <property name="delDaoObj" ref="delImpl" />
+    </bean>
+<bean id="RegisterImpl" class="com.igt.DaoImpl.RegisterDaoImpl">
+	 <constructor-arg>
+            <ref bean="sessionFactory" />
+        </constructor-arg>
+	</bean>
+ 
+	<bean id="FetchImpl" class="com.igt.DaoImpl.FetchRecordsDaoImpl">
+ <constructor-arg >
+            <ref bean="sessionFactory" />
+        </constructor-arg>
+	</bean>
+ 
+	<bean id="delImpl" class="com.igt.DaoImpl.DelRecordsDaoImpl">
+ <constructor-arg >
+            <ref bean="sessionFactory" />
+        </constructor-arg>
+	</bean>
+
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:hibernate.cfg.xml" />
+    </bean>
+     
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+       <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://192.168.29.40:3306/BALJEET_DB"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="We!c0me1n"></property>
+    </bean>
+ 
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+     
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <context:component-scan base-package="com.igt.DaoImpl.*,com.igt.user.action.*" />
+</beans>
+
+
+
+<!-- 
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://192.168.29.40:  3306/BALJEET_DB"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="We!c0me1n"></property>
+	</bean>
+
+	<bean id="sessionFactory"  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mappingResources">
+			<list>
+				<value>user.hbm.xml</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+
+			</props>
+		</property>
+	</bean>
+	
+    <tx:annotation-driven />
+     
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+</beans>
+ -->	
